@@ -2,7 +2,12 @@ from ultralytics import YOLO
 import os
 import logging
 import piexif
+from flask import Flask
 import shutil
+
+from PIL import Image
+
+app = Flask(__name__)
 
 def get_img_classification(vars_model, vars_source_image_path, vars_target_image_path, vars_target_directory):
     """
@@ -13,11 +18,11 @@ def get_img_classification(vars_model, vars_source_image_path, vars_target_image
     """
     vars_img_results = {} #initialise variable to return results
     model = YOLO(vars_model) #load model
-    results = model.predict(vars_source_image_path, conf=0.5, save=True, project=vars_target_image_path, name=vars_target_directory, exist_ok=True) #predict image
+    results = model.predict(vars_source_image_path, conf=0.5, exist_ok=True) #predict image
     
-    log_filename = 'classification.log' #log file name hardcoded
-    log_path = vars_target_image_path+'/'+vars_target_directory+'/'+log_filename # set location for log file
-    logging.basicConfig(level=logging.INFO, filename=log_path) # configure info level logging. This will be used resume sessions that prematurely die
+    # log_filename = 'classification.log' #log file name hardcoded
+    # log_path = vars_target_image_path+'/'+vars_target_directory+'/'+log_filename # set location for log file
+    # logging.basicConfig(level=logging.INFO, filename=log_path) # configure info level logging. This will be used resume sessions that prematurely die
     
     vars_img_results = {
                     'source_file_path': vars_source_image_path
@@ -26,25 +31,42 @@ def get_img_classification(vars_model, vars_source_image_path, vars_target_image
                     } #write header data
     box_list=[]
     for r in results:
-        try:
+        try:     
+            # Access the original image from the result
+            image_array = r.plot()
+                
+            # Convert the image array to PIL Image
+            image = Image.fromarray(image_array)
+                
+            # Generate a filename for the image
+            filename = os.path.basename(r.path)
+
+            # Check if there are any boxes detected
+            if len(r.boxes.data) == 0:
+                class_name = "unknown"
+            else:
+                class_id = int(r.boxes.data[0][-1])
+                class_name = model.names[class_id]
+
+            save_path = os.path.join(app.static_folder, "results", class_name)
+            os.makedirs(save_path, exist_ok=True)
+                
+            # Save the image using PIL
+            image.save(os.path.join(save_path, filename))
+            
             var = r.boxes.cls.item()
             box_list_item = {
-                            'animal': r.names[r.boxes.cls.item()]
-                            , 'confidence_score': r.boxes.conf.item()
-                            , 'box_coordinates_normalised': r.boxes.xywhn.numpy().tolist()[0]
-                            , 'image_path': r.path
-                            , 'image_filename': r.path.split('/')[-1]
+                            'animal': r.names[r.boxes.cls.item()],
+                            'confidence_score': r.boxes.conf.item(),
+                            'box_coordinates_normalised': r.boxes.xywhn.numpy().tolist()[0],
+                            'image_path': r.path,
+                            'image_filename': filename
                             } # write box payload data - can be multiple boxes/classifications
             box_list.append(box_list_item)
-            logging.info('CLASSIFICATION COMPLETE: '+r.path.split('/')[-1]) # log each file or batch of files that are processed by a single function call
-            add_metadata_tags_to_output_image_files(vars_target_image_path+'/'+vars_target_directory+'/'+r.path.split('/')[-1],r.names[r.boxes.cls.item()],r.boxes.conf.item())
-                # add metadata per reqs
-            write_file_to_subdirectory(r.path.split('/')[-1], r.names[r.boxes.cls.item()], vars_target_image_path, vars_target_directory)
-                # copy otuput image from output main directory to animal specific subdirectory
         except RuntimeError:
             continue
 
-    cleanup_image__output_directory(vars_target_image_path, vars_target_directory) # cleanup output directory
+    # cleanup_image__output_directory(vars_target_image_path, vars_target_directory) # cleanup output directory
 
     vars_img_results['boxes'] = box_list 
     
