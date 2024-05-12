@@ -1,37 +1,55 @@
-#  COSC591 Group B Classifier app
+# Animal Classifier App
+Source code for image classification app developed by COSC320/COSC591 Group B for T1 2024. 
 
-This is the source code for the image classification app being developed by COSC591 Group B for T1 2024. The aim of the app is to classify single or multiple images of identified species. 
+## The Problem 
+Our client Lachlan is faced with the long manual task of having to manually label thousands of camera trap images for detecting 16 species of animals. This process takes a long time.
 
-## Usage
+## The Solution
+The solution for our problem for automating the wildlife camera trap images is developing a software system that integrates a fine-tuned YOLOv8 model with a user-friendly GUI. This software will facilitate the automated detection and identification of the 16 specified animal species from images stored on a local computer. The finished product will be a Python-based application that will reduce the effort and time required to analyse camera trap images.
 
-### Run the app directly on your machine
+## How it was made
+The Animal Classifier App is built using a fine-tuned Ultralytics' YOLOv8 model, which has been trained on a custom dataset of 16 different species. The end-product is a Python-based application with the option of running a graphical user interface run locally on a web browser using Flask.
 
-1. Ensure all dependencies listed in requirements.txt are installed
+## Limitations
+The model is only able to predict and detect species bases on the data it was trained on. Currently, this includes animals from any of the 16 species below:
+| <span style="font-weight:normal">Rabbit</span> | <span style="font-weight:normal">Brush-tailed Rock-wallaby</span> | <span style="font-weight:normal">Spotted-tailed Quoll</span> | <span style="font-weight:normal">Swamp Wallaby</span> |
+| :--------------------------------------------: | :---------------------------------------------------------------: | :----------------------------------------------------------: | :---------------------------------------------------: |
+|             Eastern Grey Kangeroo              |                        Red-necked Wallaby                         |                           Echidna                            |                       Bandicoot                       |
+|                Brushtail Possum                |                             Lyrebird                              |                            Magpie                            |                      Kookaburra                       |
+|                   Currawong                    |                                Fox                                |                             Cat                              |                         Goat                          |
+
+## Installation (Linux/MacOS)
+1. Ensure Python 3 is installed on your local machine, alongside `pip` and `venv`
+2. Clone the GitHub repository onto your local machine using `git clone` OR download the zip file and uncompress the contents
+3. Create + activate a virtual environment for the project
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+4. Install all dependecies listed in `requirements.txt`. This can be done with:
 ```bash
 pip install -r requirements.txt
 ```
-2. Run
+## Usage
+To run the app directly on your machine:
 ```bash
 python app.py
 ```
-**********
-To run the flask app, 
-1. run 
+To run the Flask app on your local machine, run:
 ```bash
 python -m flask run
 ```
-2. Crtl + click on the URL provided in the terminal
+`Ctrl + Click` on the URL provided in the terminal to open up the Flask app in your web browser.
 
-### Run the app on a VSCode devcontainer
-1. Ensure devcontainer plugin is installed in your VSCode and Docker is installed on your machine
-2. Open folder with code and you should be prompted to reopen in container. If not, get the devcontainer options in your command palette and select reopen in container. When building the container for the first time expect to wait (13GB of dependencies on a minimal ubuntu OS)
-3. Run
+## Running the app on a VSCode devcontainer
+1. Ensure the `devcontainer` plugin is installed in your VSCode and Docker is installed onto your machine
+2. Open the folder with the code, which will prompt to reopen in the container. If not, get the `devcontainer` options in your command palette and select `reopen in container`. When building the container for the first time, expect to wait (~13GB of dependencies on a minimal Ubuntu OS)
+3. Run:
 ```bash
 python app.py
 ```
-
-## Contributing
-Limited to members of COSC591 Group B only
+## Contribution
+Limited to members of the COSC591 Group B only
 
 ## License
 TBC
