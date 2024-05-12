@@ -12,13 +12,24 @@ The Animal Classifier App is built using a fine-tuned Ultralytics' YOLOv8 model,
 
 ## Limitations
 The model is only able to predict and detect species bases on the data it was trained on. Currently, this includes animals from any of the 16 species below:
-| <span style="font-weight:normal">Rabbit</span> | <span style="font-weight:normal">Brush-tailed Rock-wallaby</span> | <span style="font-weight:normal">Spotted-tailed Quoll</span> | <span style="font-weight:normal">Swamp Wallaby</span> |
-| :--------------------------------------------: | :---------------------------------------------------------------: | :----------------------------------------------------------: | :---------------------------------------------------: |
-|             Eastern Grey Kangeroo              |                        Red-necked Wallaby                         |                           Echidna                            |                       Bandicoot                       |
-|                Brushtail Possum                |                             Lyrebird                              |                            Magpie                            |                      Kookaburra                       |
-|                   Currawong                    |                                Fox                                |                             Cat                              |                         Goat                          |
+1. Rabbit
+2. Brush-tailed Rock Wallaby
+3. Spotted-tailed Quoll
+4. Swamp Wallaby
+5. Eastern Grey Kangaroo
+6. Echidna
+7. Red-necked Wallaby
+8. Bandicoot
+9. Brushtail Possum
+10. Superb Lyrebird
+11. Kookaburra
+12. Magpie
+13. Currawong
+14. Cat
+15. Fox
+16. Goat
 
-## Installation (Linux/MacOS)
+## Installation (Linux/MacOS/Windows)
 1. Ensure Python 3 is installed on your local machine, alongside `pip` and `venv`
 2. Clone the GitHub repository onto your local machine using `git clone` OR download the zip file and uncompress the contents
 3. Create + activate a virtual environment for the project
