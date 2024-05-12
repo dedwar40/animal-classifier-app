@@ -1,17 +1,27 @@
+# Automated Animal Detection in Camera Trap Imagery Using Machine Learning
+
 # Animal Classifier App
 Source code for image classification app developed by COSC320/COSC591 Group B for T1 2024. 
 
 ## The Problem 
-Our client Lachlan is faced with the long manual task of having to manually label thousands of camera trap images for detecting 16 species of animals. This process takes a long time.
+Camera traps capture images of animals in their natural habitats using motion sensors and offer a cost-efficient and non-invasive way to monitor wildlife species. However, considerable time is required to manually go through each image and determine whether an animal is present, and if so, which species the animal is.
 
 ## The Solution
-The solution for our problem for automating the wildlife camera trap images is developing a software system that integrates a fine-tuned YOLOv8 model with a user-friendly GUI. This software will facilitate the automated detection and identification of the 16 specified animal species from images stored on a local computer. The finished product will be a Python-based application that will reduce the effort and time required to analyse camera trap images.
+This project developed an automated camera trap image processing system, leveraging machine learning (computer vision) to identify 16 species of animals in camera trap images. This system is a Python-based application that integrates a fine-tuned Ultralytics YOLOv8 model with a user friendly graphical user interface (GUI) that runs locally on a web browser using Flask. 
+
+In total 5 models were developed based on the 5 YOLOv8 models provided by Ultralytics, with the following results on held-out validation data:
+
+- yolov8n_16species model correctly identified with 96.5% precision and 95.3% recall
+- yolov8s_16species model correctly identified with 97.2% precision and 96.4% recall
+- yolov8m_16species model correctly identified with 97.3% precision and 96.2% recall
+- yolov8l_16species model correctly identified with 97.4% precision and 98.7% recall
+- yolov8x_16species model correctly identified with 97.2% precision and 96.8% recall
+
+Model weights for the two smallest models can be found in the 'weights' folder.
 
 ## How it was made
-The Animal Classifier App is built using a fine-tuned Ultralytics' YOLOv8 model, which has been trained on a custom dataset of 16 different species. The end-product is a Python-based application with the option of running a graphical user interface run locally on a web browser using Flask.
+The Animal Classifier App was fine-tuned on a custom dataset of 16 different species, containing 1,000 images of each species, including:
 
-## Limitations
-The model is only able to predict and detect species bases on the data it was trained on. Currently, this includes animals from any of the 16 species below:
 1. Rabbit
 2. Brush-tailed Rock Wallaby
 3. Spotted-tailed Quoll
@@ -29,7 +39,16 @@ The model is only able to predict and detect species bases on the data it was tr
 15. Fox
 16. Goat
 
+Bounding boxes were placed around animals in each image, and the coordinates of the bounding boxes were then used to fine tune the model, along with the images themselves.
+
+## Limitations
+The model is only able to classify animal species from those listed above.
+
+Larger models tend to provide better results on new data, however, they take longer to run compared to smaller models.
+
 ## Installation (Linux/MacOS/Windows)
+These steps have been tested for MacOS, Linux and Windows(11) operating systems. 
+
 1. Ensure Python 3 is installed on your local machine, alongside `pip` and `venv`
 2. Clone the GitHub repository onto your local machine using `git clone` OR download the zip file and uncompress the contents
 3. Create + activate a virtual environment for the project
@@ -52,13 +71,6 @@ python -m flask run
 ```
 `Ctrl + Click` on the URL provided in the terminal to open up the Flask app in your web browser.
 
-## Running the app on a VSCode devcontainer
-1. Ensure the `devcontainer` plugin is installed in your VSCode and Docker is installed onto your machine
-2. Open the folder with the code, which will prompt to reopen in the container. If not, get the `devcontainer` options in your command palette and select `reopen in container`. When building the container for the first time, expect to wait (~13GB of dependencies on a minimal Ubuntu OS)
-3. Run:
-```bash
-python app.py
-```
 ## Contribution
 Limited to members of the COSC591 Group B only
 
