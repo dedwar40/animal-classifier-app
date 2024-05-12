@@ -56,6 +56,13 @@ These steps have been tested for MacOS, Linux and Windows(11) operating systems.
 python3 -m venv .venv
 source .venv/bin/activate
 ```
+Or
+Create a conda environment 
+```bash
+conda create -n fauna_detect python=3.9
+conda activate fauna_detect
+```
+
 4. Install all dependecies listed in `requirements.txt`. This can be done with:
 ```bash
 pip install -r requirements.txt
