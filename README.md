@@ -7,7 +7,7 @@ Source code for image classification app developed by COSC320/COSC591 Group B fo
 Camera traps capture images of animals in their natural habitats using motion sensors and offer a cost-efficient and non-invasive way to monitor wildlife species. However, considerable time is required to manually go through each image and determine whether an animal is present, and if so, which species the animal is.
 
 ## The Solution
-This project developed an automated camera trap image processing system, leveraging machine learning (computer vision) to identify 16 species of animals in camera trap images. This system is a Python-based application that integrates a fine-tuned Ultralytics YOLOv8 model with a user friendly graphical user interface (GUI) that runs locally on a web browser using Flask. 
+This project developed an automated camera trap image processing system, leveraging machine learning to identify 16 species of animals in camera trap images. This system is a Python-based application that integrates a fine-tuned Ultralytics YOLOv8 model with a user friendly graphical user interface (GUI) that runs locally on a web browser using Flask. 
 
 In total 5 models were developed based on the 5 YOLOv8 models provided by Ultralytics, with the following results on held-out validation data:
 
