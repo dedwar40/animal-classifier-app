@@ -41,6 +41,13 @@ The Animal Classifier App was fine-tuned on a custom dataset of 16 different spe
 
 Bounding boxes were placed around animals in each image, and the coordinates of the bounding boxes were then used to fine tune the model, along with the images themselves.
 
+Hyperparameter optimisation was done on the following  parameters:
+- lr0 (learning rate)
+- batch size
+- epochs
+
+The weights for models with the best mAP50, mAP50-95, precision, recall and F1 Scores for each of the five different model sizes were selected.
+
 ## Limitations
 The model is only able to classify animal species from those listed above.
 
