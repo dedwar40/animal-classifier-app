@@ -9,7 +9,7 @@ Camera traps capture images of animals in their natural habitats using motion se
 ## The Solution
 This project developed an automated camera trap image processing system, leveraging machine learning to identify 16 species of animals in camera trap images. This system is a Python-based application that integrates a fine-tuned Ultralytics YOLOv8 model with a user friendly graphical user interface (GUI) that runs locally on a web browser using Flask. 
 
-In total 5 models were developed based on the 5 YOLOv8 models provided by Ultralytics, with the following results on held-out validation data:
+In total, five models were developed using the five different YOLOv8 models sizes (n, s, m, l and x). The following results on held-out validation data were observed:
 
 - yolov8n_16species model correctly identified with 96.5% precision and 95.3% recall
 - yolov8s_16species model correctly identified with 97.2% precision and 96.4% recall
