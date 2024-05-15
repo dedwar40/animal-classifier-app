@@ -49,7 +49,8 @@ Hyperparameter optimisation was done on the following  parameters:
 The weights for models with the best mAP50, mAP50-95, precision, recall and F1 Scores for each of the five different model sizes were selected.
 
 ## Limitations
-The model is only able to classify animal species from those listed above.
+The models will perform best on images similar to what they were trained on, namely images gathered form the northern half of NSW.
+The model is only able to classify animal species from those listed above and will either attempt to classify unseen species as one it was trained on or will provide a 'no detection' response.
 
 Larger models tend to provide better results on new data, however, they take longer to run compared to smaller models.
 
@@ -58,12 +59,7 @@ These steps have been tested for MacOS, Linux and Windows(11) operating systems.
 
 1. Ensure Python 3 is installed on your local machine, alongside `pip` and `venv`
 2. Clone the GitHub repository onto your local machine using `git clone` OR download the zip file and uncompress the contents
-3. Create + activate a virtual environment for the project
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-  Or
+3. Create + activate a virtual environment for the project with Python 3.9. For the following steps use terminal in MacOS/Linux or command line prompt in Windows.
 
   Create a conda environment 
 ```bash
@@ -71,7 +67,7 @@ conda create -n fauna_detect python=3.9
 conda activate fauna_detect
 ```
 
-4. Install all dependecies listed in `requirements.txt`. This can be done with:
+4. Install all dependecies listed in `requirements.txt` using the command below. Before running the command, change to the directory requirement.txt is saved.
 ```bash
 pip install -r requirements.txt
 ```
