@@ -67,7 +67,7 @@ conda create -n fauna_detect python=3.9
 conda activate fauna_detect
 ```
 
-4. Install all dependecies listed in `requirements.txt` using the command below. Before running the command, change to the directory requirement.txt is saved.
+4. Install all dependecies listed in `requirements.txt` using the command below. Before running the command, change to the directory where requirement.txt has been saved to.
 ```bash
 pip install -r requirements.txt
 ```
