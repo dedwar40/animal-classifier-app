@@ -1,6 +1,0 @@
-
-path: /scratch/COSC591GroupB/YOLO_train_data/1000/all_species/80_20/
-train: images/train  # Verify this is the correct path to your training dataset
-val: images/val    # Verify this is the correct path to your validation dataset
-nc: 16                # Number of classes; this should be 1 if you have only one class
-names: ['Rabbit','Brushtailed Rock Wallaby','Spotted Tailed Quoll','Swamp Wallaby','Eastern Grey Kangaroo','Red Necked Wallaby','Echidna','Bandicoot','Brushtail Possum','Lyrebird','Magpie','Kookaburra','Currawong','Fox','Cat','Goat']  # Class indexed at 0
