@@ -102,7 +102,11 @@ def predict():
                 file.close()
             
             # get list of all subdirectories in /results
-            subfolders = os.listdir(os.path.join(app.static_folder, "results"))
+            results_dir = os.path.join(app.static_folder, "results")
+            subfolders = [
+                folder for folder in os.listdir(results_dir) 
+                if os.path.isdir(os.path.join(results_dir, folder)) and not folder.endswith('.log')
+    ]
             # clear the uploads folder
             [os.remove(f) if f.is_file() else shutil.rmtree(f) 
              for f in Path(os.path.join(os.path.dirname(__file__), 'uploads')).rglob("*") 
@@ -116,8 +120,11 @@ def predict():
 @app.route('/view_images', methods=["POST"])
 def view():
     # Get list of all subdirectories in /results excluding .log files
-    subfolders = [folder for folder in os.listdir(os.path.join(app.static_folder, "results")) 
-                  if os.path.isdir(os.path.join(app.static_folder, "results", folder)) and not folder.endswith('.log')]
+    results_dir = os.path.join(app.static_folder, "results")
+    subfolders = [
+        folder for folder in os.listdir(results_dir) 
+        if os.path.isdir(os.path.join(results_dir, folder)) and not folder.endswith('.log')
+    ]
     return render_template("index.html", subfolders=subfolders)
 
 #
@@ -136,7 +143,7 @@ def display():
     current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
     while(
         not current_img.lower().endswith(('.png', '.jpg', '.jpeg', 'tiff', '.bmp', '.gif'))
-        and IMG_COUNTER != len(IMAGES) - 1
+        and ((IMG_COUNTER + 1) != (len(IMAGES) - 1))
     ):
         IMG_COUNTER += 1
         current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
@@ -152,15 +159,6 @@ def display():
                             )
     else:
         return render_template("index.html", current_img=current_img)
-
-#
-# Navigate back to the list of subfolders
-#
-@app.route('/back', methods=["POST"])
-def back():
-    # get list of all subdirectories in /results
-    subfolders = os.listdir(os.path.join(app.static_folder, "results"))
-    return render_template("index.html", subfolders=subfolders)
 
 #
 # Navigates to the previous image, keeping track of place in results folder
@@ -199,18 +197,19 @@ def previous():
 def next():
     global IMG_COUNTER
     global IMAGES
-    if IMG_COUNTER != len(IMAGES) - 1:
+    if IMG_COUNTER != len(IMAGES) - 2:
         IMG_COUNTER = IMG_COUNTER + 1
+    print(IMG_COUNTER)
     
     current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
     while(
         not current_img.lower().endswith(('.png', '.jpg', '.jpeg', 'tiff', '.bmp', '.gif'))
-        and IMG_COUNTER != len(IMAGES) - 1
-        and IMG_COUNTER + 1 != len(IMAGES) -1
+        and IMG_COUNTER != (len(IMAGES) - 1)
     ):
         IMG_COUNTER += 1
+        print("Found a non-image file, skipping to img: ")
+        print(IMG_COUNTER)
         current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
-    
     
     stats = display_stats(IMAGES[IMG_COUNTER].split('.')[0], SUBFOLDER)
     if stats is not None:
