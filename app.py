@@ -81,7 +81,7 @@ def predict():
                     src_path = os.path.join(root, file)
                     dst_path = os.path.join(source_directory, file)
                     shutil.move(src_path, dst_path)
-            results = get_img_classification('src/models/best.pt', source_directory, app.static_folder, "results")
+            results = get_img_classification('src/models/yolov8_n_16species.pt', source_directory, app.static_folder, "results")
             # get statistics
             for result in results.get('boxes'):
                 animal = str(result.get('animal'))
