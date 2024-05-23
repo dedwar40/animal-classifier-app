@@ -12,12 +12,16 @@
         <h1>Animal Classifier App</h1>
         <!-- This is the "Train" half of the page -->
         <div class="left">
-            {% if current_img %}
+            {% if stats %}
             <h2>STATS</h2>
-            <h3>ANIMAL: {% if animal %} {{animal}} {% endif %}</h3>
-            <h3>CONFIDENCE SCORE: {% if confidence_score %} {{confidence_score}} {% endif %}</h3>
-            <h3>BOUNDING BOX COORDINATES: {% if box_coordinates_normalised %} {{box_coordinates_normalised}} {% endif %}</h3>
-            <h3>IMAGE FILENAME: {% if image_filename %} {{image_filename}} {% endif %}</h3>
+                {% for stat in stats %}
+                <br>
+                <hr>
+                        <h3>Animal: {{ stat.animal }}</h3>
+                        <h3>Confidence Score: {{ stat.confidence_score }}</h3>
+                        <h3>Box Coordinates: {{ stat.box_coordinates_normalised }}</h3>
+                        <h3>Image Filename: {{ stat.image_filename }}</h3>
+                {% endfor %}
             {% else %}
             <h2>Process Images</h2>
             <form method="post" action="{{url_for('uploadFiles')}}" enctype="multipart/form-data">

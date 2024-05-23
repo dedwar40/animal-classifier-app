@@ -83,23 +83,39 @@ def predict():
                     shutil.move(src_path, dst_path)
             results = get_img_classification('src/models/best.pt', source_directory, app.static_folder, "results")
             # get statistics
+            stats_data = {}
             for result in results.get('boxes'):
                 animal = str(result.get('animal'))
                 confidence_score = str(result.get('confidence_score'))
                 box_coordinates_normalised = str(result.get('box_coordinates_normalised'))
                 image_filename = str(result.get('image_filename'))
-                # get path to correct subfolder
-                save_path = os.path.join(app.static_folder, "results" + "/" + animal)
-                # save to a txt file
-                filename = os.path.join(save_path, image_filename.split('.')[0] + ".txt")
-                file = open(filename, "w")
-                file.write(
-                    animal + "\n" +
-                    confidence_score + "\n" +
-                    box_coordinates_normalised + "\n" +
-                    image_filename + "\n"
+                
+                if image_filename not in stats_data:
+                    stats_data[image_filename] = []
+                
+                stats_data[image_filename].append(
+                    {
+                        "animal": animal,
+                        "confidence_score": confidence_score,
+                        "box_coordinates_normalised": box_coordinates_normalised,
+                        "image_filename": image_filename
+                    }
                 )
-                file.close()
+            
+            for image_filename, stats in stats_data.items():
+                save_path = os.path.join(app.static_folder, "results", stats[0]["animal"])
+                os.makedirs(save_path, exist_ok=True)
+                
+                filename = os.path.join(save_path, image_filename.split('.')[0] + ".txt")
+                with open(filename, "w") as file:
+                    for stat in stats:
+                        file.write(
+                            f"{stat['animal']}\n"
+                            f"{stat['confidence_score']}\n"
+                            f"{stat['box_coordinates_normalised']}\n"
+                            f"{stat['image_filename']}\n"
+                        )
+                    file.close()
             
             # get list of all subdirectories in /results
             results_dir = os.path.join(app.static_folder, "results")
@@ -149,14 +165,11 @@ def display():
         current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
     
     stats = display_stats(IMAGES[IMG_COUNTER].split('.')[0], SUBFOLDER)
+    
     if stats is not None:
         return render_template("index.html", 
-                            current_img=current_img,
-                            animal=stats[0],
-                            confidence_score=stats[1],
-                            box_coordinates_normalised = stats[2],
-                            image_filename = stats[3]
-                            )
+                               current_img=current_img,
+                               stats=stats)
     else:
         return render_template("index.html", current_img=current_img)
 
@@ -179,14 +192,11 @@ def previous():
         current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
     
     stats = display_stats(IMAGES[IMG_COUNTER].split('.')[0], SUBFOLDER)
+    
     if stats is not None:
         return render_template("index.html", 
-                            current_img=current_img,
-                            animal=stats[0],
-                            confidence_score=stats[1],
-                            box_coordinates_normalised = stats[2],
-                            image_filename = stats[3]
-                            )
+                               current_img=current_img,
+                               stats=stats)
     else:
         return render_template("index.html", current_img=current_img)
 
@@ -197,8 +207,12 @@ def previous():
 def next():
     global IMG_COUNTER
     global IMAGES
-    if IMG_COUNTER != len(IMAGES) - 2:
-        IMG_COUNTER = IMG_COUNTER + 1
+    if (SUBFOLDER != "unknown"):
+        if IMG_COUNTER != len(IMAGES) - 2:
+            IMG_COUNTER = IMG_COUNTER + 1
+    else:
+        if IMG_COUNTER != len(IMAGES) - 1:
+            IMG_COUNTER = IMG_COUNTER + 1
     print(IMG_COUNTER)
     
     current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
@@ -212,20 +226,27 @@ def next():
         current_img = "/static/results/" + SUBFOLDER + "/" + IMAGES[IMG_COUNTER]
     
     stats = display_stats(IMAGES[IMG_COUNTER].split('.')[0], SUBFOLDER)
+    
     if stats is not None:
         return render_template("index.html", 
-                            current_img=current_img,
-                            animal=stats[0],
-                            confidence_score=stats[1],
-                            box_coordinates_normalised = stats[2],
-                            image_filename = stats[3]
-                            )
+                               current_img=current_img,
+                               stats=stats)
     else:
         return render_template("index.html", current_img=current_img)
 
 def display_stats(image_filename, subfolder):
-    filename = os.path.join(app.static_folder, "results/" + subfolder + "/" + image_filename + ".txt")
-    if (Path(filename).exists()):
+    filename = os.path.join(app.static_folder, "results", subfolder, f"{image_filename}.txt")
+    if Path(filename).exists():
         with open(filename) as file:
             lines = [line.rstrip() for line in file]
-        return lines
+        
+        stats = []
+        for i in range(0, len(lines), 4):
+            stats.append({
+                "animal": lines[i],
+                "confidence_score": lines[i+1],
+                "box_coordinates_normalised": lines[i+2],
+                "image_filename": lines[i+3]
+            })
+        return stats
+    return None
