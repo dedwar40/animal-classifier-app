@@ -86,4 +86,4 @@ python -m flask run
 Limited to members of the COSC591 Group B only
 
 ## License
-TBC
+MIT
